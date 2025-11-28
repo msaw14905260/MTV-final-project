@@ -51,6 +51,35 @@ body {
 .subtitle {
   font-size: 0.95rem;
   color: #c4c7d1;
+  margin-bottom: 12px;
+}
+
+.cta-row {
+  display: inline-flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.cta-button,
+.ghost-button {
+  padding: 9px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.95rem;
+  display: inline-block;
+}
+
+.cta-button {
+  background: linear-gradient(135deg, #ff92c2, #7a8dff);
+  color: #0b0d17;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ghost-button {
+  border: 1px solid #34405b;
+  color: #d6def2;
+  background: rgba(20, 26, 41, 0.6);
 }
 
 /* === Controls === */
@@ -236,6 +265,68 @@ body {
   color: #f5f5f5;
   margin: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  scroll-snap-type: y mandatory;
+}
+
+.hero-slide {
+  background: radial-gradient(circle at 20% 20%, rgba(255, 146, 194, 0.12), transparent 45%),
+              radial-gradient(circle at 80% 30%, rgba(122, 141, 255, 0.18), transparent 40%),
+              linear-gradient(145deg, #0c0f1a, #090d16 55%, #070912);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  align-items: center;
+  justify-items: center;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.8rem;
+  color: #b6c2ff;
+  margin-bottom: 8px;
+}
+
+.hero-card {
+  background: linear-gradient(160deg, rgba(12, 17, 30, 0.8), rgba(21, 26, 40, 0.85));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.35);
+}
+
+.hero-note {
+  font-size: 0.9rem;
+  color: #cbd2e4;
+  margin-bottom: 8px;
+}
+
+.hero-facts {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+  color: #e8ecf7;
+  line-height: 1.4;
+}
+
+.hero-facts span {
+  display: inline-block;
+  min-width: 104px;
+  font-weight: 700;
+  color: #ffdd7b;
+}
+
+.slide {
+  scroll-snap-align: start;
+  min-height: 100vh;
+  display: flex;
+  align-items: center; /* center content vertically */
+  padding: 60px 0;
 }
 
 .page {
@@ -263,6 +354,12 @@ body {
 /* ===== Scrollytelling layout ===== */
 
 .scrolly {
+  display: flex; /* keep slide behavior but allow inner grid */
+  width: 100%;
+  align-items: stretch;
+}
+
+.scrolly .page {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
   gap: 24px;
@@ -272,7 +369,7 @@ body {
 /* Globe pinned on the left */
 .graphic {
   position: sticky;
-  top: 80px;
+  top: 20px;
 }
 
 #globe-container {

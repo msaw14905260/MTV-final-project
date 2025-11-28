@@ -120,12 +120,18 @@ const WORLD_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.jso
    * -------------------------------------*/
   function setupScrollProgress() {
     const steps = Array.from(document.querySelectorAll(".step"));
-    const stepTops = steps.map(s => s.offsetTop);
+    let stepTops = [];
+
+    function computeStepTops() {
+      stepTops = steps.map(s => s.getBoundingClientRect().top + window.scrollY);
+    }
+    computeStepTops();
+    window.addEventListener("resize", computeStepTops);
 
     window.addEventListener("scroll", () => {
       if (isDragging) return; // dragging overrides scroll
 
-      const scrollY = window.scrollY + window.innerHeight * 0.5;
+      const scrollY = window.scrollY + window.innerHeight * 0.25; // later handoff so current step stays active longer
       const lastIdx = stepTops.length - 1;
       let idx = 0;
 

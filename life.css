@@ -1,7 +1,13 @@
 #life-path {
-    background: #fff;
-  padding: 120px 0;
-  color: #222;
+  background: radial-gradient(circle at top, #151b2c 0%, #05060a 60%, #020308 100%);
+  padding: 60px 0;
+  color: #f5f5f5;
+}
+
+.lp-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px;
 }
 
 h1 {
@@ -13,10 +19,10 @@ h1 {
  max-width: 720px;
  font-size: 0.95rem;
  line-height: 1.6;
- color: #444;
+ color: #cbd2e4;
 }
 
-.controls {
+#life-path .controls {
  display: flex;
  flex-wrap: wrap;
  gap: 1rem;
@@ -24,19 +30,21 @@ h1 {
  align-items: center;
 }
 
-.controls label {
+#life-path .controls label {
  font-size: 0.9rem;
  display: flex;
  flex-direction: column;
  gap: 0.35rem;
+ color: #e3e7f5;
 }
 
-.controls select {
+#life-path .controls select {
  padding: 0.35rem 0.6rem;
  border-radius: 999px;
- border: 1px solid #ddd;
- background: #fff;
+ border: 1px solid #2c3348;
+ background: #111522;
  font-size: 0.9rem;
+ color: #f5f5f5;
 }
 
 .gender-toggle {
@@ -44,7 +52,8 @@ h1 {
  gap: 0.3rem;
  padding: 0.2rem;
  border-radius: 999px;
- background: #ffe9f5;
+ background: #1c253a;
+ border: 1px solid #2c3348;
 } 
 
 .gender-toggle button {
@@ -54,12 +63,12 @@ h1 {
  font-size: 0.9rem;
  cursor: pointer;
  background: transparent;
- color: #c03c72;
+ color: #cbd2e4;
 }
 
 .gender-toggle button.active {
- background: #ffb9dd;
- color: #4b1230;
+ background: linear-gradient(135deg, #ff8fc2, #7d8dff);
+ color: #0c0f1a;
 }
 
 
@@ -94,29 +103,29 @@ h1 {
  display: flex;
  align-items: center;
  justify-content: center;
- background: #eee;
- color: #555;
+ background: #0f1522;
+ color: #dfe6f5;
  font-weight: 600;
- border: 2px solid transparent;
+ border: 2px solid #2e3a56;
  transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
 }
 
 .stage-node-label {
  font-size: 0.8rem;
- color: #555;
+ color: #c4c9d8;
 }
 
 .stage-node.active .stage-node-circle {
  background: linear-gradient(135deg, #ffb8de, #8bb3ff);
- color: #34111f;
- border-color: #5a5ddf;
+ color: #0c0f1a;
+ border-color: #7d8dff;
  box-shadow: 0 0 0 3px rgba(136, 141, 255, 0.18);
  transform: translateY(-2px);
 }
 
 .stage-node.completed .stage-node-circle {
  border-style: solid;
- border-color: #9dd8a0;
+ border-color: #4cb47f;
 }
 
 .stage-node:hover .stage-node-circle {
@@ -129,11 +138,12 @@ h1 {
 }
 
 .stage-card {
- background: #ffffff;
+ background: linear-gradient(180deg, rgba(14, 19, 32, 0.9), rgba(12, 16, 27, 0.95));
  border-radius: 18px;
  padding: 1.5rem 1.6rem 1.3rem;
- box-shadow: 0 10px 26px rgba(30, 0, 60, 0.12);
- border: 1px solid rgba(160, 130, 210, 0.25);
+ box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+ border: 1px solid rgba(74, 92, 140, 0.4);
+ color: #e8ecf7;
 }
 
 .stage-card h3 {
@@ -144,7 +154,7 @@ h1 {
 .stage-text {
  font-size: 0.95rem;
  line-height: 1.7;
- color: #444;
+ color: #cbd2e4;
  margin-bottom: 1.1rem;
 }
 
@@ -172,15 +182,12 @@ h1 {
 .stage-nav button {
  flex: 1;
  border-radius: 999px;
- border: none;
+ border: 1px solid #2c3348;
  padding: 0.5rem 0.9rem;
  font-size: 0.9rem;
  cursor: pointer;
-}
-
-#lp-prev-stage {
- background: #f2edf9;
- color: #4f327d;
+ background: #0f1522;
+ color: #e8ecf7;
 }
 
 #lp-prev-stage:disabled {
@@ -190,7 +197,8 @@ h1 {
 
 #lp-next-stage {
  background: linear-gradient(135deg, #ff8fc2, #7d8dff);
- color: white;
+ color: #0c0f1a;
+ border: none;
 }
 
 
