@@ -545,7 +545,7 @@ const containerWidth = miniChartContainer.node()
   : 700;
 const width = Math.max(700, containerWidth);
 const height = 180;
-const margin = { top: 16, right: 25, bottom: 32, left: 50 };
+const margin = { top: 16, right: 25, bottom: 16, left: 50 };
 
 const svg = miniChartContainer
 .append("svg")
@@ -615,7 +615,7 @@ function drawFertilityChart(fert) {
    : 700;
  const width = Math.max(700, containerWidth);
  const height = 150;
- const margin = { top: 16, right: 25, bottom: 32, left: 50 };
+ const margin = { top: 16, right: 25, bottom: 16, left: 50 };
 
  const svg = miniChartContainer
  .append("svg")
@@ -684,7 +684,7 @@ function drawLongevityChart({ leSelf, leOther, survSelf, survOther, gender }) {
    : 700;
  const width = Math.max(700, containerWidth);
  const height = 200;
- const margin = { top: 16, right: 25, bottom: 32, left: 50 };
+ const margin = { top: 16, right: 25, bottom: 16, left: 50 };
 
  const labelSelf = gender === "male" ? "Boys" : "Girls";
  const labelOther = gender === "male" ? "Girls" : "Boys";
