@@ -324,10 +324,10 @@ function updateStageView() {
  
  text += ` Compared to ${
  otherGender === "female" ? "girls" : "boys"}, that means ${leWord} (they are at ${leOther.toFixed(1)} years and ${survOther.toFixed(1)}% reach 65).`;
- } 
- 
- textEl.text(text);
- drawLongevityChart({ leSelf, leOther, survSelf, survOther });
+} 
+
+textEl.text(text);
+ drawLongevityChart({ leSelf, leOther, survSelf, survOther, gender: currentGender });
  } else {
  textEl.text(
  `Health and survival data aren’t available here, so we can’t close the story with life expectancy for this path.`
@@ -536,13 +536,13 @@ function drawLongevityChart({ leSelf, leOther, survSelf, survOther, gender }) {
    .attr("width", width)
    .attr("height", height);
 
- svg
-   .append("text")
-   .attr("x", margin.left)
-   .attr("y", 12)
-   .attr("fill", "#555")
-   .attr("font-size", 11)
-   .text("Life expectancy & survival to 65");
+svg
+  .append("text")
+  .attr("x", margin.left)
+  .attr("y", 12)
+  .attr("fill", "#555")
+  .attr("font-size", 11)
+  .text("Life expectancy (bars, years) & survival to 65 (dot, %)");
 
  const genders = data.map((d) => d.label);
  const maxLife = d3.max(data.map((d) => d.lifeExp).filter(isNumber)) || 90;
@@ -553,11 +553,11 @@ function drawLongevityChart({ leSelf, leOther, survSelf, survOther, gender }) {
    .nice()
    .range([margin.left, width - margin.right]);
 
- const y = d3
-   .scaleBand()
-   .domain(genders)
-   .range([margin.top + 8, height - margin.bottom])
-   .padding(0.4);
+  const y = d3
+    .scaleBand()
+    .domain(genders)
+    .range([margin.top + 22, height - margin.bottom])
+    .padding(0.4);
 
  svg
    .selectAll("rect.life-bar")
@@ -589,6 +589,18 @@ function drawLongevityChart({ leSelf, leOther, survSelf, survOther, gender }) {
    .scaleLinear()
    .domain([0, 100])
    .range([margin.left, width - margin.right]);
+
+  svg
+    .append("g")
+    .attr("transform", `translate(0,${margin.top + 18})`)
+    .call(d3.axisTop(survScale).ticks(5).tickFormat((d) => `${d}%`))
+    .call((g) =>
+      g
+        .selectAll("text")
+        .attr("font-size", 10)
+       .attr("fill", "#4a4a4a")
+   )
+   .call((g) => g.select(".domain").attr("stroke", "#aaa"));
 
  svg
    .selectAll("circle.surv-dot")
