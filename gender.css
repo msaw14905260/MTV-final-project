@@ -92,3 +92,31 @@
 .tooltip {
   color: #0f172a;
 }
+
+/* Give the mini-charts some room inside each period card */
+.region-period .mini-chart {
+  margin-top: 12px;
+  margin-bottom: 18px;
+}
+
+/* Typography for the tiny charts */
+.mini-chart text.metric-label {
+  font-size: 14px;
+  fill: #e5e7eb;
+}
+
+.mini-chart text.mini-axis-tick,
+.mini-chart text.mini-axis-label,
+.mini-chart text.story-annotation {
+  font-size: 12px;
+  fill: #9ca3af;
+}
+
+/* Bar colors (same as rest of site) */
+.bar-girls {
+  fill: #f472b6;
+}
+
+.bar-boys {
+  fill: #60a5fa;
+}

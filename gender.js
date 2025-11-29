@@ -275,7 +275,7 @@ function updateChart(decade, animate = true) {
     .call(
       d3.axisBottom(x)
         .ticks(7)
-        .tickFormat(d => `${d} pts`)
+        .tickFormat(d => `${d}%`)
     );
 
   yAxisG
