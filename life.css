@@ -58,6 +58,7 @@ h1 {
  border: 1px solid #2c3348;
  align-self: end;
  justify-content: center;
+ position: relative;
 }
 
 .gender-toggle button {
@@ -74,6 +75,7 @@ h1 {
  background: linear-gradient(135deg, #ff8fc2, #7d8dff);
  color: #0c0f1a;
 }
+
 
 
 .stage-track-wrapper {

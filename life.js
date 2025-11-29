@@ -40,7 +40,7 @@ const stages = [
 let allData = [];
 let currentRegion = null;
 let currentYear = null;
-let currentGender = "female";
+let currentGender = null;
 let currentStageIndex = 0;
 let stageState = {};
 
@@ -53,6 +53,7 @@ const textEl = d3.select("#lp-stage-text");
 const miniChartContainer = d3.select("#lp-stage-mini-chart");
 const prevBtn = d3.select("#lp-prev-stage");
 const nextBtn = d3.select("#lp-next-stage");
+const resetPathBtn = d3.select("#lp-reset-path");
 const guessSection = d3.select("#lp-guess-section");
 const guessInput = d3.select("#lp-guess-input");
 const guessNumber = d3.select("#lp-guess-number");
@@ -66,11 +67,11 @@ d3.csv("data/gender_regions_decades.csv", d3.autoType).then((data) => {
 
  initControls();
  initStageTrack();
- resetStageState();
- 
- currentRegion = regionSelect.property("value");
- currentYear = +yearSelect.property("value");
- updateStageView();
+resetStageState();
+
+currentRegion = null;
+currentYear = null;
+updateStageView();
 });
 
 
@@ -78,12 +79,21 @@ function initControls() {
  const regions = Array.from(new Set(allData.map((d) => d.region))).sort(
  d3.ascending
  );
+ regionSelect.selectAll("*").remove();
  regionSelect
- .selectAll("option")
- .data(regions)
- .join("option")
- .attr("value", (d) => d)
- .text((d) => d);
+   .append("option")
+   .attr("value", "")
+   .attr("disabled", true)
+   .attr("selected", true)
+   .text("Select region");
+ regionSelect
+   .selectAll("option.region-opt")
+   .data(regions)
+   .join("option")
+   .attr("class", "region-opt")
+   .attr("value", (d) => d)
+   .text((d) => d);
+ regionSelect.property("selectedIndex", 0);
 
 
  const allYears = Array.from(new Set(allData.map((d) => d.Year))).sort(
@@ -91,29 +101,36 @@ function initControls() {
  );
  const years = allYears.filter((y) => y >= 1970 && y <= 2010);
 
+ yearSelect.selectAll("*").remove();
  yearSelect
- .selectAll("option")
- .data(years)
- .join("option")
- .attr("value", (d) => d)
- .text((d) => `${d}-${d + 9}`);
+   .append("option")
+   .attr("value", "")
+   .attr("disabled", true)
+   .attr("selected", true)
+   .text("Select year");
+ yearSelect
+  .selectAll("option.year-opt")
+  .data(years)
+  .join("option")
+  .attr("class", "year-opt")
+  .attr("value", (d) => d)
+  .text((d) => `${d}-${d + 9}`);
+ yearSelect.property("selectedIndex", 0);
 
-
- yearSelect.property("value", d3.max(years));
-
- regionSelect.on("change", () => {
- currentRegion = regionSelect.property("value");
+regionSelect.on("change", () => {
+ currentRegion = regionSelect.property("value") || null;
  resetStageState();
  updateStageView();
- });
+});
 
- yearSelect.on("change", () => {
- currentYear = +yearSelect.property("value");
+yearSelect.on("change", () => {
+ const val = yearSelect.property("value");
+ currentYear = val ? +val : null;
  resetStageState();
  updateStageView();
- });
+});
 
- genderToggle.selectAll("button").on("click", function () {
+genderToggle.selectAll("button").on("click", function () {
  const btn = d3.select(this);
  currentGender = btn.attr("data-gender");
  genderToggle.selectAll("button").classed("active", false);
@@ -121,14 +138,14 @@ function initControls() {
  genderToggle.attr("data-active", currentGender);
  resetStageState();
  updateStageView();
- });
+});
 
- prevBtn.on("click", () => {
+prevBtn.on("click", () => {
  if (currentStageIndex > 0) {
  currentStageIndex -= 1;
  updateStageView();
  }
- });
+});
 
 nextBtn.on("click", () => {
  if (currentStageIndex < stages.length - 1) {
@@ -137,11 +154,29 @@ nextBtn.on("click", () => {
  }
 });
 
- // Guess submit
- guessSubmit.on("click", () => {
-   const stage = stages[currentStageIndex];
-   const row = getCurrentRow();
-   if (!row) return;
+resetPathBtn.on("click", () => {
+ currentRegion = null;
+ currentYear = null;
+ currentGender = null;
+ // reset selects to placeholder option
+ regionSelect.property("value", "");
+ yearSelect.property("value", "");
+ const regionNode = regionSelect.node();
+ const yearNode = yearSelect.node();
+ if (regionNode) regionNode.selectedIndex = 0;
+ if (yearNode) yearNode.selectedIndex = 0;
+ genderToggle.selectAll("button").classed("active", false);
+ genderToggle.attr("data-active", "");
+ currentStageIndex = 0;
+ resetStageState();
+ updateStageView();
+});
+
+// Guess submit
+guessSubmit.on("click", () => {
+  const stage = stages[currentStageIndex];
+  const row = getCurrentRow();
+  if (!row) return;
    const actual = getStageActualValue(stage.id, row);
    if (!isNumber(actual)) {
      guessFeedback.text("No data to check your guess here.");
@@ -225,14 +260,14 @@ guessNumber.on("input", function () {
 
 
 function updateStageView() {
- if (!currentRegion) currentRegion = regionSelect.property("value");
- if (!currentYear) currentYear = +yearSelect.property("value");
-
- const row = getCurrentRow();
  const stage = stages[currentStageIndex];
+ const hasSelection = currentRegion && currentYear && currentGender;
+ const row = hasSelection ? getCurrentRow() : null;
  const state = stageState[stage.id] || { revealed: false, feedback: "" };
- setGuessUI(stage.id);
- guessSection.style("display", row ? null : "none");
+ if (hasSelection && row) {
+   setGuessUI(stage.id);
+ }
+ guessSection.style("display", hasSelection && row ? null : "none");
 
  
  stageTrack.selectAll(".stage-node").classed("active", (d, i) => {
@@ -244,24 +279,26 @@ function updateStageView() {
  });
 
  
- prevBtn.property("disabled", currentStageIndex === 0);
- nextBtn.text(
- currentStageIndex === stages.length - 1 ? "Finish ◀◀" : "Next stage ▶"
- );
- nextBtn.property(
-   "disabled",
+prevBtn.property("disabled", currentStageIndex === 0);
+nextBtn.text(
+currentStageIndex === stages.length - 1 ? "Finish ◀◀" : "Next stage ▶"
+);
+nextBtn.property(
+  "disabled",
    (!state.revealed && currentStageIndex !== stages.length - 1) || !row
- );
+);
 
- if (!row) {
+if (!row) {
  titleEl.text("Pick a path to begin");
  textEl.text(
- `Select a region and year to start guessing.`
+   hasSelection
+     ? "No data for this selection. Try a different region or year."
+     : "Select a region, year, and gender to start guessing."
  );
  miniChartContainer.selectAll("*").remove();
  guessSection.style("display", "none");
  return;
- }
+}
  const genderLabel = currentGender === "female" ? "girl" : "boy";
  const otherGender = currentGender === "female" ? "male" : "female";
  const region = currentRegion;
