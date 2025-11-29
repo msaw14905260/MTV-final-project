@@ -376,9 +376,23 @@ countriesLayer
           (d) => d.Decade
         );
 
-        metricColumns = data.columns.filter((c) =>
-          c.startsWith("average_value_")
-        );
+        const allowed = new Set([
+          "average_value_Adolescent fertility rate (births per 1,000 women ages 15-19)",
+          "average_value_Births attended by skilled health staff (% of total)",
+          "average_value_Fertility rate, total (births per woman)",
+          "average_value_Life expectancy at birth, female (years)",
+          "average_value_Life expectancy at birth, male (years)",
+          "average_value_Mortality rate, adult, female (per 1,000 female adults)",
+          "average_value_Mortality rate, adult, male (per 1,000 male adults)",
+          "average_value_School enrollment, secondary, female (% gross)",
+          "average_value_School enrollment, secondary, male (% gross)",
+          "average_value_School enrollment, tertiary, female (% gross)",
+          "average_value_School enrollment, tertiary, male (% gross)",
+          "average_value_Survival to age 65, female (% of cohort)",
+          "average_value_Survival to age 65, male (% of cohort)"
+        ]);
+
+        metricColumns = data.columns.filter((c) => allowed.has(c));
 
         const preferredMetric =
           metricColumns.find((c) =>

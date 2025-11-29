@@ -559,8 +559,15 @@ body {
 
 /* ===== Explore section (bottom view) ===== */
 
+.explore-slide {
+  background: radial-gradient(circle at 20% 20%, rgba(94, 255, 230, 0.08), transparent 45%),
+              radial-gradient(circle at 80% 10%, rgba(255, 181, 118, 0.12), transparent 50%),
+              linear-gradient(160deg, #0a101c, #0c1222 60%, #0b1020);
+}
+
 .explore {
   margin-top: 80px;
+  padding: 60px 16px 90px;
 }
 
 .explore h2 {
