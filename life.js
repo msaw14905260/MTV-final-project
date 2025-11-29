@@ -232,10 +232,10 @@ function getCurrentRow() {
 
 function setGuessUI(stageId) {
  const ranges = {
-   primary: { min: 0, max: 120, step: 1, label: "Enrollment %" },
-   secondary: { min: 0, max: 120, step: 1, label: "Enrollment %" },
-   tertiary: { min: 0, max: 140, step: 1, label: "Enrollment %" },
-   fertility: { min: 0, max: 8, step: 0.1, label: "Births per woman" },
+   primary: { min: 0, max: 100, step: 1, label: "Enrollment %" },
+   secondary: { min: 0, max: 100, step: 1, label: "Enrollment %" },
+   tertiary: { min: 0, max: 100, step: 1, label: "Enrollment %" },
+   fertility: { min: 0, max: 15, step: 0.1, label: "Births per woman" },
    longevity: { min: 40, max: 90, step: 0.5, label: "Life expectancy (years)" },
  };
  const r = ranges[stageId] || { min: 0, max: 100, step: 1, label: "" };
@@ -533,26 +533,30 @@ function drawMiniBarChart({ title, row, stageId, unit }) {
  
  const selfLabel = currentGender === "female" ? "Girls" : "Boys";
  const otherLabel = currentGender === "female" ? "Boys" : "Girls";
- const selfColor = currentGender === "male" ? "#7e9cff" : "#ff8cbc";
- const otherColor = currentGender === "male" ? "#ff8cbc" : "#7e9cff";
- const data = [
-   { gender: selfLabel, value: selfLabel === "Girls" ? valFemale : valMale },
-   { gender: otherLabel, value: otherLabel === "Girls" ? valFemale : valMale },
- ];
+const selfColor = currentGender === "male" ? "#7e9cff" : "#ff8cbc";
+const otherColor = currentGender === "male" ? "#ff8cbc" : "#7e9cff";
+const data = [
+  { gender: selfLabel, value: selfLabel === "Girls" ? valFemale : valMale },
+  { gender: otherLabel, value: otherLabel === "Girls" ? valFemale : valMale },
+];
 
- const width = 340;
- const height = 90;
- const margin = { top: 20, right: 10, bottom: 24, left: 70 };
+const containerWidth = miniChartContainer.node()
+  ? miniChartContainer.node().getBoundingClientRect().width
+  : 700;
+const width = Math.max(700, containerWidth);
+const height = 180;
+const margin = { top: 16, right: 25, bottom: 32, left: 50 };
 
- const svg = miniChartContainer
- .append("svg")
- .attr("width", width)
- .attr("height", height);
+const svg = miniChartContainer
+.append("svg")
+.attr("width", "100%")
+.attr("height", height)
+.attr("viewBox", `0 0 ${width} ${height}`);
 
- const x = d3
- .scaleLinear()
- .domain([0, d3.max(data, (d) => d.value) || 1])
- .nice()
+const x = d3
+.scaleLinear()
+.domain([0, d3.max(data, (d) => d.value) || 1])
+.nice()
  .range([margin.left, width - margin.right]);
 
  const y = d3
@@ -606,14 +610,18 @@ function drawMiniBarChart({ title, row, stageId, unit }) {
 function drawFertilityChart(fert) {
  miniChartContainer.selectAll("*").remove();
 
- const width = 340;
- const height = 90;
- const margin = { top: 20, right: 16, bottom: 28, left: 40 };
+ const containerWidth = miniChartContainer.node()
+   ? miniChartContainer.node().getBoundingClientRect().width
+   : 700;
+ const width = Math.max(700, containerWidth);
+ const height = 150;
+ const margin = { top: 16, right: 25, bottom: 32, left: 50 };
 
  const svg = miniChartContainer
  .append("svg")
- .attr("width", width)
- .attr("height", height);
+ .attr("width", "100%")
+ .attr("height", height)
+ .attr("viewBox", `0 0 ${width} ${height}`);
 
  const maxF = Math.max(1, Math.min(7, fert + 1));
  const x = d3
@@ -671,9 +679,12 @@ function drawFertilityChart(fert) {
 function drawLongevityChart({ leSelf, leOther, survSelf, survOther, gender }) {
  miniChartContainer.selectAll("*").remove();
 
- const width = 360;
- const height = 110;
- const margin = { top: 18, right: 16, bottom: 30, left: 60 };
+ const containerWidth = miniChartContainer.node()
+   ? miniChartContainer.node().getBoundingClientRect().width
+   : 700;
+ const width = Math.max(700, containerWidth);
+ const height = 200;
+ const margin = { top: 16, right: 25, bottom: 32, left: 50 };
 
  const labelSelf = gender === "male" ? "Boys" : "Girls";
  const labelOther = gender === "male" ? "Girls" : "Boys";
@@ -701,8 +712,9 @@ function drawLongevityChart({ leSelf, leOther, survSelf, survOther, gender }) {
 
  const svg = miniChartContainer
    .append("svg")
-   .attr("width", width)
-   .attr("height", height);
+   .attr("width", "100%")
+   .attr("height", height)
+   .attr("viewBox", `0 0 ${width} ${height}`);
 
 svg
   .append("text")
