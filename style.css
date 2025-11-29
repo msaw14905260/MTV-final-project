@@ -795,3 +795,50 @@ body {
     height: 90vmin;
   }
 }
+.takeaway {
+  background: radial-gradient(circle at 30% 10%, rgba(255, 146, 194, 0.1), transparent 45%),
+              radial-gradient(circle at 80% 20%, rgba(122, 141, 255, 0.12), transparent 50%),
+              linear-gradient(140deg, #0a0f1c, #0a1124 60%, #080d19);
+}
+
+.takeaway-card {
+  background: rgba(12, 15, 28, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 22px 24px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  color: #e8ecf7;
+  line-height: 1.6;
+}
+
+.takeaway-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+  color: #ffb8de;
+  margin-bottom: 6px;
+}
+
+.takeaway-card h2 {
+  margin: 0 0 8px;
+  font-size: 1.6rem;
+}
+
+.takeaway-lede {
+  color: #cdd3e8;
+  margin: 0 0 12px;
+}
+
+.takeaway-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.takeaway-closer {
+  margin: 8px 0 0;
+  font-weight: 600;
+  color: #ffd8f0;
+}
