@@ -458,7 +458,7 @@ function drawFertilityChart(fert) {
  .attr("y", 12)
  .attr("fill", "#555")
  .attr("font-size", 11)
- .text("Average number of children per woman");
+ .text("Average number of children");
 
  
  svg
@@ -500,121 +500,133 @@ function drawFertilityChart(fert) {
 }
 
 
-function drawLongevityChart({ leSelf, leOther, survSelf, survOther }) {
+function drawLongevityChart({ leSelf, leOther, survSelf, survOther, gender }) {
  miniChartContainer.selectAll("*").remove();
 
  const width = 360;
  const height = 110;
  const margin = { top: 18, right: 16, bottom: 30, left: 60 };
 
- const svg = miniChartContainer
- .append("svg")
- .attr("width", width)
- .attr("height", height);
+ const labelSelf = gender === "male" ? "Boys" : "Girls";
+ const labelOther = gender === "male" ? "Girls" : "Boys";
+ const selfColor = gender === "male" ? "#7e9cff" : "#ff8cbc";
+ const otherColor = gender === "male" ? "#ff8cbc" : "#7e9cff";
 
- svg
- .append("text")
- .attr("x", margin.left)
- .attr("y", 12)
- .attr("fill", "#555")
- .attr("font-size", 11)
- .text("Life expectancy & survival to 65");
- const genders = ["You", "Other"];
  const data = [
- {
- label: "You",
- lifeExp: leSelf,
- survival: isNumber(survSelf) ? survSelf : null,
- },
- 
- {
- label: "Other",
- lifeExp: leOther,
- survival: isNumber(survOther) ? survOther : null,
- },
+   {
+     label: labelSelf,
+     lifeExp: isNumber(leSelf) ? leSelf : 0,
+     hasLife: isNumber(leSelf),
+     survival: isNumber(survSelf) ? survSelf : null,
+   },
+   {
+     label: labelOther,
+     lifeExp: isNumber(leOther) ? leOther : 0,
+     hasLife: isNumber(leOther),
+     survival: isNumber(survOther) ? survOther : null,
+   },
  ];
 
+ if (!data.some((d) => d.hasLife)) {
+   return;
+ }
+
+ const svg = miniChartContainer
+   .append("svg")
+   .attr("width", width)
+   .attr("height", height);
+
+ svg
+   .append("text")
+   .attr("x", margin.left)
+   .attr("y", 12)
+   .attr("fill", "#555")
+   .attr("font-size", 11)
+   .text("Life expectancy & survival to 65");
+
+ const genders = data.map((d) => d.label);
+ const maxLife = d3.max(data.map((d) => d.lifeExp).filter(isNumber)) || 90;
+
  const x = d3
- .scaleLinear()
- .domain([
- 40,
- d3.max(data.map((d) => d.lifeExp).filter(isNumber)) || 90,])
- .nice()
- .range([margin.left, width - margin.right]);
+   .scaleLinear()
+   .domain([40, maxLife])
+   .nice()
+   .range([margin.left, width - margin.right]);
 
  const y = d3
- .scaleBand()
- .domain(genders)
- .range([margin.top + 8, height - margin.bottom])
- .padding(0.4);
+   .scaleBand()
+   .domain(genders)
+   .range([margin.top + 8, height - margin.bottom])
+   .padding(0.4);
+
  svg
- .selectAll("rect.life-bar")
- .data(data)
- .join("rect")
- .attr("class", "life-bar")
- .attr("x", x(40))
- .attr("y", (d) => y(d.label))
- .attr("height", y.bandwidth())
- .attr("width", 0)
- .attr("rx", 6)
- .attr("fill", (d) => (d.label === "You" ? "#ff8cbc" : "#7e9cff"))
- .transition()
- .duration(700)
- .attr("width", (d) => x(d.lifeExp) - x(40));
+   .selectAll("rect.life-bar")
+   .data(data)
+   .join("rect")
+   .attr("class", "life-bar")
+   .attr("x", x(40))
+   .attr("y", (d) => y(d.label))
+   .attr("height", y.bandwidth())
+   .attr("width", 0)
+   .attr("rx", 6)
+   .attr("fill", (d) => (d.label === labelSelf ? selfColor : otherColor))
+   .transition()
+   .duration(700)
+   .attr("width", (d) => x(d.lifeExp) - x(40));
+
  svg
- .selectAll("text.life-label")
- .data(data)
- .join("text")
- .attr("class", "life-label")
- .attr("x", (d) => x(d.lifeExp) + 4)
- .attr("y", (d) => y(d.label) + y.bandwidth() / 2 + 4)
- .attr("font-size", 10.5)
- .attr("fill", "#333")
- .text((d) => `${d.lifeExp.toFixed(1)} yrs`);
- 
+   .selectAll("text.life-label")
+   .data(data)
+   .join("text")
+   .attr("class", "life-label")
+   .attr("x", (d) => x(d.lifeExp) + 4)
+   .attr("y", (d) => y(d.label) + y.bandwidth() / 2 + 4)
+   .attr("font-size", 10.5)
+   .attr("fill", "#333")
+   .text((d) => `${d.lifeExp.toFixed(1)} yrs`);
 
  const survScale = d3
- .scaleLinear()
- .domain([0, 100])
- .range([margin.left, width - margin.right]);
+   .scaleLinear()
+   .domain([0, 100])
+   .range([margin.left, width - margin.right]);
 
  svg
- .selectAll("circle.surv-dot")
- .data(data.filter((d) => isNumber(d.survival)))
- .join("circle")
- .attr("class", "surv-dot")
- .attr("cx", (d) => survScale(d.survival))
- .attr("cy", (d) => y(d.label) + y.bandwidth() / 2)
- .attr("r", 0)
- .attr("fill", "#3c8f5d")
- .attr("stroke", "#fff")
- .attr("stroke-width", 1.5)
- .transition()
- .delay(400)
- .duration(400)
- .attr("r", 5);
+   .selectAll("circle.surv-dot")
+   .data(data.filter((d) => isNumber(d.survival)))
+   .join("circle")
+   .attr("class", "surv-dot")
+   .attr("cx", (d) => survScale(d.survival))
+   .attr("cy", (d) => y(d.label) + y.bandwidth() / 2)
+   .attr("r", 0)
+   .attr("fill", "#3c8f5d")
+   .attr("stroke", "#fff")
+   .attr("stroke-width", 1.5)
+   .transition()
+   .delay(400)
+   .duration(400)
+   .attr("r", 5);
 
  svg
- .append("g")
- .attr("transform", `translate(0,${height - margin.bottom})`)
- .call(
- d3.axisBottom(x).ticks(4).tickFormat((d) => `${d} yrs`)
- )
- .call((g) => g
- .selectAll("text")
- .attr("font-size", 10)
- .attr("fill", "#666")
- )
- .call((g) => g.select(".domain").attr("stroke", "#aaa"));
+   .append("g")
+   .attr("transform", `translate(0,${height - margin.bottom})`)
+   .call(d3.axisBottom(x).ticks(4).tickFormat((d) => `${d} yrs`))
+   .call((g) =>
+     g
+       .selectAll("text")
+       .attr("font-size", 10)
+       .attr("fill", "#666")
+   )
+   .call((g) => g.select(".domain").attr("stroke", "#aaa"));
 
  svg
- .append("g")
- .attr("transform", `translate(${margin.left},0)`)
- .call(d3.axisLeft(y).tickSize(0))
- .call((g) => g
- .selectAll("text")
- .attr("font-size", 11)
- .attr("fill", "#444")
- )
- .call((g) => g.select(".domain").remove());
+   .append("g")
+   .attr("transform", `translate(${margin.left},0)`)
+   .call(d3.axisLeft(y).tickSize(0))
+   .call((g) =>
+     g
+       .selectAll("text")
+       .attr("font-size", 11)
+       .attr("fill", "#444")
+   )
+   .call((g) => g.select(".domain").remove());
 }

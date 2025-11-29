@@ -16,18 +16,19 @@ h1 {
 }
 
 .lede {
- max-width: 720px;
+ max-width: none;
  font-size: 0.95rem;
  line-height: 1.6;
  color: #cbd2e4;
+ white-space: nowrap;
 }
 
 #life-path .controls {
- display: flex;
- flex-wrap: wrap;
- gap: 1rem;
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+ gap: 12px 16px;
  margin-top: 1.25rem;
- align-items: center;
+ align-items: end;
 }
 
 #life-path .controls label {
@@ -45,6 +46,7 @@ h1 {
  background: #111522;
  font-size: 0.9rem;
  color: #f5f5f5;
+ min-height: 38px;
 }
 
 .gender-toggle {
@@ -54,7 +56,9 @@ h1 {
  border-radius: 999px;
  background: #1c253a;
  border: 1px solid #2c3348;
-} 
+ align-self: end;
+ justify-content: center;
+}
 
 .gender-toggle button {
  border: none;
@@ -221,5 +225,9 @@ h1 {
 
  .stage-card {
  padding: 1.3rem 1.1rem 1.1rem;
+ }
+
+ .lede {
+  white-space: normal;
  }
 }
