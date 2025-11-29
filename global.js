@@ -641,9 +641,6 @@ countriesLayer
     )}</span>
       </div>
 
-      <div class="country-stats-notes">
-        Based on ${years.length} year(s) of data: ${years.join(", ")}.
-      </div>
     `;
   }
 
