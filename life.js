@@ -247,6 +247,15 @@ function setGuessUI(stageId) {
  guessNumber.property("value", startVal);
  guessStageLabel.text(r.label);
  guessFeedback.text(stageState[stageId]?.feedback || "");
+
+ const accent =
+   currentGender === "male"
+     ? "#7d8dff"
+     : currentGender === "female"
+     ? "#ff8fc2"
+     : "#4a5368";
+ guessInput.style("accent-color", accent);
+ guessNumber.style("border-color", accent);
 }
 
 guessInput.on("input", function () {
@@ -522,9 +531,13 @@ function drawMiniBarChart({ title, row, stageId, unit }) {
  return;
  }
  
+ const selfLabel = currentGender === "female" ? "Girls" : "Boys";
+ const otherLabel = currentGender === "female" ? "Boys" : "Girls";
+ const selfColor = currentGender === "male" ? "#7e9cff" : "#ff8cbc";
+ const otherColor = currentGender === "male" ? "#ff8cbc" : "#7e9cff";
  const data = [
- { gender: "Girls", value: valFemale },
- { gender: "Boys", value: valMale },
+   { gender: selfLabel, value: selfLabel === "Girls" ? valFemale : valMale },
+   { gender: otherLabel, value: otherLabel === "Girls" ? valFemale : valMale },
  ];
 
  const width = 340;
@@ -565,7 +578,7 @@ function drawMiniBarChart({ title, row, stageId, unit }) {
  .attr("height", y.bandwidth())
  .attr("width", 0)
  .attr("rx", 6)
- .attr("fill", (d) => (d.gender === "Girls" ? "#ff8cbc" : "#7e9cff"))
+ .attr("fill", (d) => (d.gender === selfLabel ? selfColor : otherColor))
  .transition()
  .duration(700)
  .attr("width", (d) => x(d.value) - x(0));

@@ -72,8 +72,13 @@ h1 {
 }
 
 .gender-toggle button.active {
- background: linear-gradient(135deg, #ff8fc2, #7d8dff);
- color: #0c0f1a;
+  background: #ff8fc2;
+  color: #0c0f1a;
+}
+
+.gender-toggle button.active[data-gender="male"] {
+  background: #7d8dff;
+  color: #0c0f1a;
 }
 
 
