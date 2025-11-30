@@ -3,35 +3,33 @@ document.addEventListener("DOMContentLoaded", () => {
   const uniContainer  = document.getElementById("dual-university-chart");
   if (!highContainer || !uniContainer || typeof d3 === "undefined") return;
 
-
+  
   const regions = [
-    "Sub-Saharan Africa",
-    "South Asia",
-    "East Asia & Pacific",
+    "Africa",
+    "Asia",
     "Middle East & North Africa",
-    "Europe & Central Asia",
-    "Latin America & Caribbean",
-    "North America",
+    "Europe",
+    "Latin America & the Caribbean",
+    "Northern America",
     "Oceania"
   ];
 
   
   const gapsSecondary = [
     -7,  
-    0,   
-    0,   
+     0,  
     -4,  
-    0,   
-    6,   
-    0,   
-    0    
+     0, 
+     6,  
+     0,  
+     0   
   ];
 
+  
   const gapsTertiary = [
     -3,  
     -1,  
-    0,   
-    1,  
+     1,  
     11,  
     12,  
     28,  
@@ -48,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
     gap: gapsTertiary[i]
   }));
 
-  // --- Shared chart config ---
+
   function renderHorizontalBars(container, data) {
     const containerWidth = container.clientWidth || 600;
     const width  = containerWidth;
@@ -57,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const svg = d3
       .select(container)
-      .html("") // clear any previous SVG
+      .html("") 
       .append("svg")
       .attr("width", width)
       .attr("height", height);
@@ -114,14 +112,16 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr("class", "dual-bar")
       .attr("transform", d => `translate(0,${y(d.region)})`);
 
+    
     bars
       .append("rect")
       .attr("height", y.bandwidth())
       .attr("width", d => x(Math.abs(d.gap)))
       .attr("rx", 6)
       .attr("ry", 6)
-      .attr("fill", d => (d.gap >= 0 ? "#ff8fc7" : "#7a96ff"));
+      .attr("fill", d => (d.gap >= 0 ? "#ff8fc7" : "#7a96ff")); // pink = girls, blue = boys
 
+    
     bars
       .append("text")
       .attr("x", d => x(Math.abs(d.gap)) + 8)
