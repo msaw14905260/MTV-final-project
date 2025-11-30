@@ -131,45 +131,29 @@ const WORLD_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.jso
     window.addEventListener("scroll", () => {
       if (isDragging) return; // dragging overrides scroll
 
-      const scrollY = window.scrollY + window.innerHeight * 0.25; // later handoff so current step stays active longer
-      const lastIdx = stepTops.length - 1;
+      const viewportCenter = window.innerHeight * 0.5;
+
+      // Find the .step whose center is closest to the viewport center
       let idx = 0;
+      let minDist = Infinity;
 
-      if (scrollY >= stepTops[lastIdx]) {
-        idx = lastIdx; // past the final step
-      } else {
-        // find which two steps we are between
-        for (let i = 0; i < stepTops.length - 1; i++) {
-          if (scrollY >= stepTops[i] && scrollY < stepTops[i + 1]) {
-            idx = i;
-            break;
-          }
+      steps.forEach((step, i) => {
+        const rect = step.getBoundingClientRect();
+        const stepCenter = rect.top + rect.height / 2;
+        const dist = Math.abs(stepCenter - viewportCenter);
+        if (dist < minDist) {
+          minDist = dist;
+          idx = i;
         }
-      }
+      });
 
-      const startFrame = keyframes[idx];
-      const endFrame = keyframes[idx + 1] || keyframes[idx];
+      const frame = keyframes[idx];
 
-      // compute progress from step idx → idx+1
-      const startY = stepTops[idx];
-      const endY = stepTops[idx + 1] || (startY + 800);
-      const t = Math.min(Math.max((scrollY - startY) / (endY - startY), 0), 1);
-
-      // interpolate rotation
-      const startRot = [-startFrame.coords[0], -startFrame.coords[1]];
-      const endRot   = [-endFrame.coords[0], -endFrame.coords[1]];
-
-      // Avoid the long way round when crossing the dateline (e.g., N. America → Oceania)
-      let adjustedEnd = endRot.slice();
-      const lonDiff = adjustedEnd[0] - startRot[0];
-      if (lonDiff > 180) adjustedEnd[0] -= 360;
-      if (lonDiff < -180) adjustedEnd[0] += 360;
-
-      const rInterp = d3.interpolate(startRot, adjustedEnd);
-      rotation = rInterp(d3.easeCubicInOut(t));
-
+      // Snap globe rotation directly to the active region
+      rotation = [-frame.coords[0], -frame.coords[1]];
       projection.rotate(rotation);
-      annotationGroup.datum(startFrame);
+
+      annotationGroup.datum(frame);
       render();
     });
 
