@@ -289,3 +289,52 @@ h1 {
   white-space: normal;
  }
 }
+
+/* Force "Your guess" bar to be yellow */
+.mini-chart svg rect.bar[data-type="guess"] {
+  fill: #f7e8a4 !important;
+}
+
+/* ===== UNIVERSAL "YOUR GUESS" YELLOW RULES ===== */
+
+/* Mini-chart (school stages) */
+#lp-stage-mini-chart svg rect[data-type="guess"] {
+  fill: #f7e8a4 !important;
+}
+
+/* Fertility chart */
+#lp-stage-mini-chart svg rect.fert-bar[data-type="guess"] {
+  fill: #f7e8a4 !important;
+}
+
+/* Long-term health / longevity chart */
+#lp-stage-mini-chart svg rect.life-bar[data-type="guess"] {
+  fill: #f7e8a4 !important;
+}
+
+#lp-stage-mini-chart svg text[data-type="guess"] {
+  fill: #f7e8a4 !important;
+}
+
+
+#fertility-guess-icons {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0 4px;
+  cursor: pointer;
+  font-size: 38px;
+}
+
+#fertility-guess-icons .baby-icon {
+  opacity: 0.35;
+  transition: transform 0.12s ease, opacity 0.12s ease;
+}
+
+#fertility-guess-icons .baby-icon.active {
+  opacity: 1;
+  color: #f7e8a4; /* guess yellow */
+}
+
+#fertility-guess-icons .baby-icon:hover {
+  transform: scale(1.2);
+}
