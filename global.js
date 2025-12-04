@@ -120,6 +120,8 @@ const WORLD_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.jso
    * -------------------------------------*/
   function setupScrollProgress() {
     const steps = Array.from(document.querySelectorAll(".step"));
+    const stepsContainer = document.querySelector(".steps");
+    let activeIndex = 0;
     let stepTops = [];
 
     function computeStepTops() {
@@ -155,10 +157,19 @@ const WORLD_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.jso
 
       annotationGroup.datum(frame);
       render();
+
+      if (idx !== activeIndex) {
+        activeIndex = idx;
+        steps.forEach((step, i) => step.classList.toggle("is-active", i === idx));
+      }
     });
 
     // set initial annotation
     annotationGroup.datum(keyframes[0]);
+    // set initial state
+    if (steps.length) {
+      steps[0].classList.add("is-active");
+    }
   }
 
   /* -------------------------------------
@@ -177,6 +188,13 @@ const WORLD_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.jso
 
     const labelOffsetX = 70;
     const labelOffsetY = -25;
+
+    annotationGroup
+      .append("circle")
+      .attr("class", "annotation-halo")
+      .attr("cx", x)
+      .attr("cy", y)
+      .attr("r", 20);
 
     annotationGroup
       .append("circle")

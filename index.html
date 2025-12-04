@@ -353,12 +353,13 @@
 <section id="dual-gap-section" class="slide">
   <div class="page">
     <div class="dual-gap-card">
-      <h2>2010-2019: High school vs. university gaps by region</h2>
+      <h2>A different view: 2010-2019 high school vs. university gaps by region</h2>
+      <br>
       <p class="dual-gap-lede">
         These charts compare how big the gender gaps are in <strong>high school (secondary)</strong>
         and <strong>university / college (tertiary)</strong> enrollment.
         Pink means girls are more enrolled; blue means boys are more enrolled.
-        The longer the bar, the bigger the gap.
+        The longer the bar, the bigger the gap. Girls are pushing boundaries in education!
       </p>
 
       <div class="dual-gap-grid">
@@ -382,10 +383,10 @@
 ================================= -->
 <section class="slide explore explore-splide">
   <div class="page">
-    <h2>Explore the Data Yourself</h2>
-    <p class="explore-subtitle">
-      Choose a metric and year to see how gender gaps vary by country.
-    </p>
+  <h2>Explore the Data Yourself</h2>
+  <p class="explore-subtitle">
+    Choose a metric and year to see how gender gaps vary by country.
+  </p>
 
     <div class="explore-controls">
       <div class="control-group">
@@ -419,12 +420,40 @@
         </div>
       </div>
 
-      <div id="country-stats" class="country-stats country-stats--empty">
-        <p class="country-stats-placeholder">
-          Click on a country to see its decade-average stats.
+  <div id="country-stats" class="country-stats country-stats--empty">
+    <p class="country-stats-placeholder">
+      Click on a country to see its decade-average stats.
+    </p>
+  </div>
+</section>
+</div>
+</section>
+
+<!-- ================================
+     Country Spotlight: Sideways scrollytelling
+================================= -->
+<section id="country-spotlight" class="slide">
+  <div class="page">
+    <div class="spotlight-head">
+      <div>
+        <p class="eyebrow">Your country in context</p>
+        <h2>See how your country stacks up</h2>
+        <p class="spotlight-subtitle">
+          Pick where you live; slide sideways to see how it compares against peers across different metrics.
+          We'll highlight your country on each scatter plot.
         </p>
       </div>
-    </section>
+      <div class="spotlight-inputs">
+        <label for="spotlight-country">Where do you live?</label>
+        <select id="spotlight-country">
+          <option value="" disabled selected>Select a country</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="spotlight-track" id="spotlight-track" aria-live="polite">
+      <!-- cards injected by spotlight.js -->
+    </div>
   </div>
 </section>
 
@@ -465,6 +494,7 @@
 <script type="module" src="life.js"></script>
 <script type="module" src="gender.js"></script>
 <script type="module" src="dualChart.js"></script>
+<script type="module" src="spotlight.js"></script>
 
 </body>
 
