@@ -1260,6 +1260,22 @@ body::after {
   fill: rgba(255, 255, 255, 0.04);
 }
 
+.x-axis text,
+.y-axis text {
+  fill: #ffffff;
+}
+
+.x-axis path,
+.x-axis line,
+.y-axis path,
+.y-axis line {
+  stroke: #ffffff;
+}
+
+.axis-title {
+  fill: #ffffff;
+}
+
 .line {
   fill: none;
   stroke-width: 2.4px;
@@ -1297,6 +1313,19 @@ body::after {
   stroke-width: 1.4px;
   stroke-dasharray: 4 3;
   opacity: 0.85;
+}
+
+.here-line {
+  stroke: #fcd34d;
+  stroke-width: 2px;
+  stroke-dasharray: 3 4;
+  opacity: 0.9;
+}
+
+.here-label {
+  fill: #ffe9a3;
+  font-weight: 700;
+  font-size: 0.8rem;
 }
 
 .marker {

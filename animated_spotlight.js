@@ -21,6 +21,7 @@ const startYear = 1970;
 const actualCutoff = 2020;
 const endYear = 2035;
 const projectionYears = [2025, 2035];
+const hereYear = 2025;
 
 const femaleColor = "#ff7eb6";
 const maleColor = "#6aa5ff";
@@ -69,6 +70,21 @@ g.append("rect")
   .attr("y", 0)
   .attr("width", x(endYear) - x(actualCutoff))
   .attr("height", innerHeight);
+
+const hereLine = g
+  .append("line")
+  .attr("class", "here-line")
+  .attr("x1", x(hereYear))
+  .attr("x2", x(hereYear))
+  .attr("y1", 0)
+  .attr("y2", innerHeight);
+
+g.append("text")
+  .attr("class", "here-label")
+  .attr("x", x(hereYear))
+  .attr("y", 12)
+  .attr("text-anchor", "middle")
+  .text("You are here (2025)");
 
 const xAxisG = g.append("g").attr("class", "x-axis").attr("transform", `translate(0,${innerHeight})`);
 const yAxisG = g.append("g").attr("class", "y-axis");
