@@ -100,14 +100,14 @@ requestedColumns.forEach((col) => {
 // Reorder and keep only the requested columns from the user prompt
 const pairOrder = [
   "Adjusted net enrollment rate, primary",
-  "Educational attainment, Doctoral or equivalent, population 25+",
-  "Educational attainment, at least Bachelor's or equivalent, population 25+",
   "Educational attainment, at least completed upper secondary, population 25+",
+  "Educational attainment, at least Bachelor's or equivalent, population 25+",
+  "Educational attainment, Doctoral or equivalent, population 25+",
 ];
 
 const singleOrder = [
-  "Adolescent fertility rate (births per 1,000 women ages 15-19)",
   "Births attended by skilled health staff (% of total)",
+  "Adolescent fertility rate (births per 1,000 women ages 15-19)",
   "Fertility rate, total (births per woman)",
 ];
 
@@ -133,7 +133,7 @@ if (countrySelect && track) {
         ...d,
         country: typeof d["Country Name"] === "string" ? d["Country Name"].trim() : d["Country Name"],
       }))
-      .filter((d) => d.country);
+      .filter((d) => d.country && isRealCountry(d.country));
 
     const rowsByCountry = d3.group(cleaned, (d) => d.country);
 
@@ -189,7 +189,29 @@ if (countrySelect && track) {
       return buildSingleCard(metric, perCountry);
     });
 
-    const cards = [...pairCards, ...singleCards];
+    const orderedLabels = [
+      "Births attended by skilled health staff (% of total)",
+      "Adjusted net enrollment rate, primary",
+      "Educational attainment, at least completed upper secondary, population 25+",
+      "Educational attainment, at least Bachelor's or equivalent, population 25+",
+      "Educational attainment, Doctoral or equivalent, population 25+",
+      "Adolescent fertility rate (births per 1,000 women ages 15-19)",
+      "Fertility rate, total (births per woman)",
+    ];
+
+    const cardsByLabel = new Map(
+      [...pairCards, ...singleCards].map((c) => [c.metric.label, c])
+    );
+
+    const cards = [];
+    orderedLabels.forEach((label) => {
+      if (cardsByLabel.has(label)) {
+        cards.push(cardsByLabel.get(label));
+        cardsByLabel.delete(label);
+      }
+    });
+    // append any remaining cards (if any)
+    cards.push(...cardsByLabel.values());
 
     countrySelect.addEventListener("change", () => {
       selectedCountry = countrySelect.value || null;
@@ -200,6 +222,46 @@ if (countrySelect && track) {
 
 function isValidNumber(val) {
   return typeof val === "number" && !Number.isNaN(val);
+}
+
+function isRealCountry(name) {
+  const n = name.toLowerCase();
+  const banned = [
+    "income",
+    "oecd",
+    "ida",
+    "ibrd",
+    "hipc",
+    "euro area",
+    "europe &",
+    "sub-saharan",
+    "latin america",
+    "caribbean",
+    "east asia",
+    "central asia",
+    "central europe",
+    "middle east",
+    "north africa",
+    "south asia",
+    "arab world",
+    "world",
+    "small states",
+    "fragile",
+    "pacific",
+    "least developed",
+    "developing only",
+    "developing",
+    "high income",
+    "low income",
+    "upper middle income",
+    "lower middle income",
+    "g7",
+    "g20",
+    "demographic dividend",
+    "africa eastern and southern",
+    "africa western and central",
+  ];
+  return !banned.some((b) => n.includes(b));
 }
 
 function findLatest(list, predicate) {

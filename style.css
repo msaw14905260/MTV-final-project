@@ -759,6 +759,14 @@ body::after {
   z-index: 9999;
 }
 
+.spotlight-disclaimer {
+  margin-top: 14px;
+  color: #cbd2e4;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  max-width: 840px;
+}
+
 @media (max-width: 768px) {
   .spotlight-track {
     grid-auto-columns: minmax(360px, 94vw);
