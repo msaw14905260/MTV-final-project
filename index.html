@@ -348,6 +348,47 @@
 
 
 <!-- ================================
+     Animated spotlight: gender education over time
+================================ -->
+<section class="slide spotlight-animated" id="animated-spotlight">
+  <div class="page">
+    <div class="animated-card">
+      <div class="animated-header">
+        <div>
+          <p class="eyebrow">Girls vs. boys in school</p>
+          <h2>How gender gaps in secondary school shift over time and where they could go next</h2>
+          <p class="animated-lede">
+            Watch each region's girls and boys enrollment move from 1970 to today, then see a simple projection to 2025 and 2035 based on the last decade of change.
+          </p>
+        </div>
+        <div class="animated-controls">
+          <label class="control">
+            Region
+            <select id="anim-region-select"></select>
+          </label>
+          <button id="anim-toggle" type="button">Play</button>
+          <div class="year-pill">
+            <span id="anim-year-label">1970</span>
+            <small id="anim-year-note">projected after 2020</small>
+          </div>
+        </div>
+        <div class="animated-gap" id="anim-gap-text"></div>
+      </div>
+
+      <div id="animated-spotlight-chart"></div>
+      <p class="data-annotation">
+        Note: Gross enrollment can exceed 100% because it counts all students in secondary, including under/over-age learners and repeaters, divided by the official school-age population.
+      </p>
+      <div class="animated-meta">
+        <div>
+          <strong>Data</strong>: Secondary enrollment (gross %) by gender, region averages (World Bank). Projection uses a damped trend from the last two decades (momentum that slows over time).
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================
      Summary for schools
 ================================= -->
 <section id="dual-gap-section" class="slide">
@@ -497,6 +538,7 @@
 <script src="https://unpkg.com/topojson-client@3"></script>
 
 <script src="global.js"></script>
+<script type="module" src="animated_spotlight.js"></script>
 <script type="module" src="storyChart.js"></script>
 <script type="module" src="life.js"></script>
 <script type="module" src="gender.js"></script>
