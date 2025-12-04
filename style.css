@@ -767,6 +767,14 @@ body::after {
   max-width: 840px;
 }
 
+.spotlight-parity-note {
+  margin: 6px 0 0;
+  color: #cbd2e4;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  max-width: 780px;
+}
+
 @media (max-width: 768px) {
   .spotlight-track {
     grid-auto-columns: minmax(360px, 94vw);
