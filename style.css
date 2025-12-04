@@ -1162,7 +1162,7 @@ body::after {
 
 /* Animated spotlight */
 .spotlight-animated {
-  background: #0c1224;
+  background: transparent;
 }
 
 .animated-card {
