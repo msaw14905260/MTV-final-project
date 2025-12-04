@@ -7,6 +7,7 @@ if (container.empty()) {
 
 const regionSelect = d3.select("#anim-region-select");
 const toggleBtn = d3.select("#anim-toggle");
+const resetBtn = d3.select("#anim-reset");
 const yearLabel = d3.select("#anim-year-label");
 const yearNote = d3.select("#anim-year-note");
 const gapText = d3.select("#anim-gap-text");
@@ -311,6 +312,11 @@ toggleBtn.on("click", () => {
   } else {
     startPlaying();
   }
+});
+
+resetBtn.on("click", () => {
+  stopPlaying();
+  setYear(startYear);
 });
 
 d3.csv("data/gender_regions_decades.csv", d3.autoType)

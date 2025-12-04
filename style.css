@@ -1231,6 +1231,29 @@ body::after {
   box-shadow: 0 14px 28px rgba(122, 141, 255, 0.32);
 }
 
+#anim-reset {
+  background: #0b1529;
+  color: #e5e7eb;
+  border: 1px solid #243653;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+#anim-reset:hover {
+  transform: translateY(-1px);
+  border-color: #7a8dff;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+.play-reset {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .year-pill {
   display: flex;
   align-items: center;
