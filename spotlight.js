@@ -335,11 +335,11 @@ function buildCard(metric, data) {
     .attr("class", "spotlight-highlight-label")
     .attr("visibility", "hidden");
 
-  return { card, metric, kind: "pair", g, filtered, x, y, highlight, highlightLabel };
+  return { card, metric, kind: "pair", g, filtered, x, y, highlight, highlightLabel, innerW, innerH };
 }
 
 function updateCardHighlight(card, countryName) {
-  const { filtered, x, y, yPos, highlight, highlightLabel, kind } = card;
+  const { filtered, x, y, yPos, highlight, highlightLabel, kind, innerW, innerH } = card;
   if (!x || !filtered) return;
   if (kind === "pair" && !y) return;
   if (kind === "single" && yPos == null) return;
@@ -359,10 +359,19 @@ function updateCardHighlight(card, countryName) {
     .attr("cx", cx)
     .attr("cy", cy);
 
+  const maxX = typeof innerW === "number" ? innerW : x.range()[1];
+  const maxY = typeof innerH === "number" ? innerH : (y ? y.range()[0] : yPos);
+  const roomRight = maxX - cx;
+  const placeLeft = roomRight < 120; // long names near the edge -> flip to left
+  const labelX = placeLeft ? Math.max(10, cx - 12) : Math.min(maxX - 10, cx + 12);
+  const labelY = Math.min(maxY - 6, Math.max(14, cy - 6));
+  const anchor = placeLeft ? "end" : "start";
+
   highlightLabel
     .attr("visibility", "visible")
-    .attr("x", cx + 10)
-    .attr("y", cy - 8)
+    .attr("x", labelX)
+    .attr("y", labelY)
+    .attr("text-anchor", anchor)
     .text(`${match.country}`);
 
   // Keep tooltip hidden until hover on selected country
@@ -469,5 +478,5 @@ function buildSingleCard(metric, data) {
     .attr("class", "spotlight-highlight-label")
     .attr("visibility", "hidden");
 
-  return { card, metric, kind: "single", filtered, x, yPos, highlight, highlightLabel };
+  return { card, metric, kind: "single", filtered, x, yPos, highlight, highlightLabel, innerW, innerH };
 }
