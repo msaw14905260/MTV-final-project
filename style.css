@@ -723,6 +723,8 @@ body::after {
   stroke: rgba(7, 10, 18, 0.8);
   stroke-width: 0.8px;
   filter: drop-shadow(0 0 4px rgba(122, 141, 255, 0.4));
+  outline: none;
+  pointer-events: all;
 }
 
 .spotlight-dot:hover {

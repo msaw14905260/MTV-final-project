@@ -64,6 +64,88 @@ const spotlightTooltip = d3
   .append("div")
   .attr("class", "spotlight-tooltip")
   .style("opacity", 0);
+const formatSpotlightNumber = d3.format(",.2~f");
+const tooltipOffset = { x: 12, y: 16 };
+
+function showSpotlightTooltip(event, html, target) {
+  spotlightTooltip.style("opacity", 1).style("display", "block").html(html);
+  moveSpotlightTooltip(event, target);
+}
+
+function moveSpotlightTooltip(event, target) {
+  const coords = getEventCoords(event) || getElementCoords(target) || { x: 0, y: 0 };
+  spotlightTooltip
+    .style("left", coords.x + tooltipOffset.x + "px")
+    .style("top", coords.y - tooltipOffset.y + "px");
+}
+
+function hideSpotlightTooltip() {
+  spotlightTooltip.style("opacity", 0).style("display", "none");
+}
+
+function getEventCoords(event) {
+  if (event && event.touches && event.touches.length) {
+    const t = event.touches[0];
+    return { x: t.clientX, y: t.clientY };
+  }
+  if (event && event.changedTouches && event.changedTouches.length) {
+    const t = event.changedTouches[0];
+    return { x: t.clientX, y: t.clientY };
+  }
+  if (event && typeof event.clientX === "number" && typeof event.clientY === "number") {
+    return { x: event.clientX, y: event.clientY };
+  }
+  return { x: 0, y: 0 };
+}
+
+function getElementCoords(node) {
+  if (!node || typeof node.getBoundingClientRect !== "function") return null;
+  const rect = node.getBoundingClientRect();
+  return {
+    x: rect.left + rect.width / 2,
+    y: rect.top + rect.height / 2,
+  };
+}
+
+function htmlToPlainText(html) {
+  return html.replace(/<br\s*\/?>/gi, " / ").replace(/<[^>]+>/g, "");
+}
+
+function attachDotTooltip(selection, getContent) {
+  selection
+    .style("cursor", "pointer")
+    .style("pointer-events", "all")
+    // Mouse
+    .on("mouseover", (event, d) => {
+      showSpotlightTooltip(event, getContent(d), event.currentTarget);
+    })
+    .on("mousemove", (event) => {
+      moveSpotlightTooltip(event, event.currentTarget);
+    })
+    .on("mouseout", () => {
+      hideSpotlightTooltip();
+    })
+    // Touch
+    .on("touchstart", (event, d) => {
+      showSpotlightTooltip(event, getContent(d), event.currentTarget);
+    })
+    .on("touchmove", (event) => {
+      moveSpotlightTooltip(event, event.currentTarget);
+    })
+    .on("touchend touchcancel", () => {
+      hideSpotlightTooltip();
+    })
+    // Keyboard focus support
+    .on("focus", (event, d) => {
+      showSpotlightTooltip(event, getContent(d), event.currentTarget);
+    })
+    .on("blur", () => {
+      hideSpotlightTooltip();
+    });
+
+  // Remove any existing native titles to avoid double tooltips
+  selection.select("title").remove();
+}
 requestedColumns.forEach((col) => {
   if (!/female/i.test(col)) return;
   const maleCol = col.replace(/female/i, "male");
@@ -366,24 +448,12 @@ function buildCard(metric, data) {
     .attr("cx", (d) => x(d.male))
     .attr("cy", (d) => y(d.female));
 
-  dots
-    .on("mouseenter", (event, d) => {
-      if (!selectedCountry || d.country !== selectedCountry) return;
-      spotlightTooltip
-        .style("opacity", 1)
-        .html(
-          `<strong>${d.country}</strong><br>Girls: ${d.female.toFixed(1)}<br>Boys: ${d.male.toFixed(1)}`
-        );
-    })
-    .on("mousemove", (event) => {
-      if (!selectedCountry) return;
-      spotlightTooltip
-        .style("left", event.pageX + 10 + "px")
-        .style("top", event.pageY - 20 + "px");
-    })
-    .on("mouseleave", () => {
-      spotlightTooltip.style("opacity", 0);
-    });
+  attachDotTooltip(dots, (d) => {
+    const tooltipHtml = `<strong>${d.country}</strong><br>Girls: ${formatSpotlightNumber(
+      d.female
+    )}<br>Boys: ${formatSpotlightNumber(d.male)}`;
+    return tooltipHtml;
+  });
 
   // Highlight layer
   const highlight = g
@@ -436,8 +506,7 @@ function updateCardHighlight(card, countryName) {
     .attr("text-anchor", anchor)
     .text(`${match.country}`);
 
-  // Keep tooltip hidden until hover on selected country
-  spotlightTooltip.style("opacity", 0);
+  hideSpotlightTooltip();
 }
 
 function buildSingleCard(metric, data) {
@@ -510,24 +579,12 @@ function buildSingleCard(metric, data) {
     .attr("cx", (d) => x(d.value))
     .attr("cy", yPos);
 
-  dots
-    .on("mouseenter", (event, d) => {
-      if (!selectedCountry || d.country !== selectedCountry) return;
-      spotlightTooltip
-        .style("opacity", 1)
-        .html(
-          `<strong>${d.country}</strong><br>Value: ${d.value.toFixed(2)}`
-        );
-    })
-    .on("mousemove", (event) => {
-      if (!selectedCountry) return;
-      spotlightTooltip
-        .style("left", event.pageX + 10 + "px")
-        .style("top", event.pageY - 20 + "px");
-    })
-    .on("mouseleave", () => {
-      spotlightTooltip.style("opacity", 0);
-    });
+  attachDotTooltip(dots, (d) => {
+    const tooltipHtml = `<strong>${d.country}</strong><br>${metric.label}: ${formatSpotlightNumber(
+      d.value
+    )}`;
+    return tooltipHtml;
+  });
 
   const highlight = g
     .append("circle")
