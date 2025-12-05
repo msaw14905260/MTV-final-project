@@ -92,10 +92,16 @@ function getEventCoords(event) {
     const t = event.changedTouches[0];
     return { x: t.clientX, y: t.clientY };
   }
-  if (event && typeof event.clientX === "number" && typeof event.clientY === "number") {
+  if (
+    event &&
+    typeof event.clientX === "number" &&
+    typeof event.clientY === "number" &&
+    !Number.isNaN(event.clientX) &&
+    !Number.isNaN(event.clientY)
+  ) {
     return { x: event.clientX, y: event.clientY };
   }
-  return { x: 0, y: 0 };
+  return null;
 }
 
 function getElementCoords(node) {
