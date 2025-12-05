@@ -707,10 +707,10 @@ function drawMiniBarChart({ title, row, stageId, unit, guess }) {
     .attr("y", d => y(d.label) + barYOffset)
     .attr("height", barHeight)
     .attr("rx", 6)
+    .style("fill", barColor) // inline style beats CSS first/last coloring
     .attr("width", 0)
     .transition()
     .duration(700)
-    .attr("fill", barColor)     // <-- put inside transition
     .attr("width", d => x(d.value) - x(0));
 
 
@@ -925,22 +925,22 @@ function drawLongevityChart({ leSelf, leOther, survSelf, survOther, gender, gues
  const barYOffsetLon = y.bandwidth() * 0.19;
 
  svg
-   .selectAll("rect.life-bar")
-   .data(data)
-   .join("rect")
-   .attr("class", "life-bar")
-   .attr("data-type", d => d.type)  
-   .attr("x", x(40))
-   .attr("y", (d) => y(d.label) + barYOffsetLon)
-   .attr("height", barHeightLon)
-   .attr("width", 0)
-   .attr("rx", 6)
-   .attr("fill", (d) =>
-     d.type === "guess"
-       ? guessColor
-       : d.label === "Girls"
-       ? girlColor
-       : boyColor
+  .selectAll("rect.life-bar")
+  .data(data)
+  .join("rect")
+  .attr("class", "life-bar")
+  .attr("data-type", d => d.type)  
+  .attr("x", x(40))
+  .attr("y", (d) => y(d.label) + barYOffsetLon)
+  .attr("height", barHeightLon)
+  .attr("width", 0)
+  .attr("rx", 6)
+  .style("fill", (d) =>
+    d.type === "guess"
+      ? guessColor
+      : d.label === "Girls"
+      ? girlColor
+      : boyColor
    )
    .transition()
    .duration(700)
