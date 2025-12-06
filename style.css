@@ -1432,57 +1432,47 @@ body::after {
   transition: opacity 0.35s ease;
 }
 
-/* when JS adds this class, hint is visible */
+/* Base scroll hint (starts hidden) */
+.scroll-hint {
+  position: fixed;
+  bottom: 2.5rem;
+  left: 2.5rem;          /* left side instead of right */
+  z-index: 50;
+  font-size: 0.85rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #f9e5ff;
+  opacity: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+
+/* just text + arrow, no box */
+.scroll-hint__text {
+  font-weight: 500;
+}
+
+.scroll-hint__arrow {
+  font-size: 1rem;
+  animation: scroll-hint-bounce 1.4s infinite;
+}
+
+/* visible state */
 .scroll-hint--visible {
   opacity: 0.9;
 }
 
-/* little glowing dot */
-.scroll-hint__dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: #ffcf66;
-  box-shadow: 0 0 0 0 rgba(255, 207, 102, 0.8);
-  animation: scroll-hint-pulse 1.8s infinite;
+/* hidden at the end */
+.scroll-hint--hide {
+  opacity: 0;
 }
 
-.scroll-hint__text {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-/* arrow under the text */
-.scroll-hint__arrow {
-  font-size: 1.1rem;
-  margin-left: 0.9rem; /* lines up under the text a bit */
-  animation: scroll-hint-bounce 1.4s infinite;
-}
-
-/* Pulse + bounce animations */
-@keyframes scroll-hint-pulse {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(255, 207, 102, 0.8);
-  }
-  70% {
-    transform: scale(1.7);
-    box-shadow: 0 0 0 12px rgba(255, 207, 102, 0);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(255, 207, 102, 0);
-  }
-}
-
+/* little bounce animation for the arrow */
 @keyframes scroll-hint-bounce {
-  0%, 100% {
-    transform: translateY(0);
-    opacity: 0.45;
-  }
-  50% {
-    transform: translateY(6px);
-    opacity: 1;
-  }
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(4px); }
 }
+
