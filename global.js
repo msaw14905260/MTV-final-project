@@ -676,39 +676,34 @@ const WORLD_URL =
   }
 })();
 
-// Scroll hint: show starting at Life Path, hide at Key Takeaway
+// Scroll hint: show between Life Path and Key Takeaway
 document.addEventListener("DOMContentLoaded", () => {
   const hint = document.getElementById("scroll-hint");
   const lifePathSection = document.getElementById("life-path");
-  const takeawaySection = document.querySelector(".takeaway");
+  const takeawaySection = document.getElementById("takeaway");
 
   if (!hint || !lifePathSection || !takeawaySection) return;
 
-  // Show the hint when the Life Path section first comes into view
-  const lifeObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          hint.classList.add("scroll-hint--visible");
-        }
-      });
-    },
-    { threshold: 0.4 }
-  );
+  function updateHint() {
+    const viewportCenter = window.scrollY + window.innerHeight / 2;
+    const lifeTop = lifePathSection.offsetTop;
+    const takeawayTop = takeawaySection.offsetTop;
 
-  // Hide the hint once the Key Takeaway section comes into view
-  const takeawayObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          hint.classList.remove("scroll-hint--visible");
-          hint.classList.add("scroll-hint--hide");
-        }
-      });
-    },
-    { threshold: 0.3 }
-  );
+    // show only when we're between Life Path and Takeaway
+    if (viewportCenter >= lifeTop && viewportCenter < takeawayTop) {
+      hint.classList.add("scroll-hint--visible");
+      hint.classList.remove("scroll-hint--hide");
+    } else if (viewportCenter >= takeawayTop) {
+      // fade out once we reach the takeaway
+      hint.classList.remove("scroll-hint--visible");
+      hint.classList.add("scroll-hint--hide");
+    } else {
+      // before Life Path → hidden
+      hint.classList.remove("scroll-hint--visible", "scroll-hint--hide");
+    }
+  }
 
-  lifeObserver.observe(lifePathSection);
-  takeawayObserver.observe(takeawaySection);
+  window.addEventListener("scroll", updateHint);
+  window.addEventListener("resize", updateHint);
+  updateHint(); // run once on load
 });
