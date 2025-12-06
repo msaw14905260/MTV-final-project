@@ -681,6 +681,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
+        if (entry.target !== takeaway) return;
+        
         if (entry.isIntersecting) {
           hint.classList.add("scroll-hint--hide");
         } else {
@@ -690,3 +692,13 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     { threshold: 0.3 }
   );
+
+  observer.observe(takeaway);
+
+  hint.addEventListener("click", () => {
+    window.scrollBy({
+      top: window.innerHeight * 0.85,
+      behavior: "smooth",
+    });
+  });
+});
