@@ -676,38 +676,39 @@ const WORLD_URL =
   }
 })();
 
-/* =======================================
- * SCROLL HINT — SHOW UNTIL KEY TAKEAWAY
- * =====================================*/
+// Scroll hint: show starting at Life Path, hide at Key Takeaway
 document.addEventListener("DOMContentLoaded", () => {
   const hint = document.getElementById("scroll-hint");
-  const takeaway = document.getElementById("takeaway");
+  const lifePathSection = document.getElementById("life-path");
+  const takeawaySection = document.querySelector(".takeaway");
 
-  if (!hint || !takeaway) return;
+  if (!hint || !lifePathSection || !takeawaySection) return;
 
-  const observer = new IntersectionObserver(
+  // Show the hint when the Life Path section first comes into view
+  const lifeObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        if (entry.target !== takeaway) return;
-
         if (entry.isIntersecting) {
-          hint.classList.add("scroll-hint--hide");
-        } else {
-          hint.classList.remove("scroll-hint--hide");
+          hint.classList.add("scroll-hint--visible");
         }
       });
     },
-    { threshold: 0.5 }
+    { threshold: 0.4 }
   );
 
-  observer.observe(takeaway);
+  // Hide the hint once the Key Takeaway section comes into view
+  const takeawayObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          hint.classList.remove("scroll-hint--visible");
+          hint.classList.add("scroll-hint--hide");
+        }
+      });
+    },
+    { threshold: 0.3 }
+  );
 
-  // Clicking the hint scrolls down one "screen"
-  hint.addEventListener("click", () => {
-    window.scrollBy({
-      top: window.innerHeight * 0.85,
-      behavior: "smooth",
-    });
-  });
+  lifeObserver.observe(lifePathSection);
+  takeawayObserver.observe(takeawaySection);
 });
-
