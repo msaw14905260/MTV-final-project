@@ -1410,51 +1410,79 @@ body::after {
   }
 }
 
-/* Floating "keep scrolling" hint */
+/* Scroll hint (bottom-left, simple text + arrow) */
 .scroll-hint {
   position: fixed;
-  right: 2.5rem;
-  bottom: 2.5rem;
-  z-index: 9999;
+  left: 2.5rem;
+  bottom: 2rem;
+  z-index: 50;
+
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1.1rem;
-  border-radius: 999px;
-  background: rgba(11, 12, 30, 0.9);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(14px);
-  color: #f8f4ff;
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  pointer-events: none; 
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 220ms ease-out, transform 220ms ease-out;
+  color: rgba(249, 236, 255, 0.9);
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
 }
 
-.scroll-hint-dot {
+/* when JS adds this class, hint is visible */
+.scroll-hint--visible {
+  opacity: 0.9;
+}
+
+/* little glowing dot */
+.scroll-hint__dot {
   width: 6px;
   height: 6px;
   border-radius: 999px;
-  background: #ffd26f;
-  box-shadow: 0 0 12px rgba(255, 210, 111, 0.8);
+  background: #ffcf66;
+  box-shadow: 0 0 0 0 rgba(255, 207, 102, 0.8);
+  animation: scroll-hint-pulse 1.8s infinite;
 }
 
-.scroll-hint-arrow {
-  font-size: 0.9rem;
-  animation: scrollHintBounce 1.2s ease-in-out infinite;
+.scroll-hint__text {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-/* Hidden when we're at the last slide */
-.scroll-hint--hide {
-  opacity: 0;
-  transform: translateY(10px);
+/* arrow under the text */
+.scroll-hint__arrow {
+  font-size: 1.1rem;
+  margin-left: 0.9rem; /* lines up under the text a bit */
+  animation: scroll-hint-bounce 1.4s infinite;
 }
 
-@keyframes scrollHintBounce {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(3px); }
+/* Pulse + bounce animations */
+@keyframes scroll-hint-pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 207, 102, 0.8);
+  }
+  70% {
+    transform: scale(1.7);
+    box-shadow: 0 0 0 12px rgba(255, 207, 102, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 207, 102, 0);
+  }
 }
 
+@keyframes scroll-hint-bounce {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 1;
+  }
+}
