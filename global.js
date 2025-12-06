@@ -670,3 +670,23 @@ countriesLayer
     `;
   }
 })();
+
+// scroll until key takeaway
+document.addEventListener("DOMContentLoaded", () => {
+  const hint = document.getElementById("scroll-hint");
+  const takeaway = document.getElementById("takeaway");
+
+  if (!hint || !takeaway) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          hint.classList.add("scroll-hint--hide");
+        } else {
+          hint.classList.remove("scroll-hint--hide");
+        }
+      });
+    },
+    { threshold: 0.3 }
+  );
