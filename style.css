@@ -91,7 +91,7 @@ body::after {
 }
 
 .header h1 {
-  font-size: 2.1rem;
+  font-size: 3.0rem;
   font-weight: 650;
   margin-bottom: 6px;
 }
@@ -913,6 +913,88 @@ body::after {
   width: 100%;
   height: 100%;
   display: block;
+}
+
+.explore-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.9fr);
+  gap: 18px;
+  align-items: start;
+  margin-top: 12px;
+}
+
+.explore-left {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items:normal; /* center legend and globe together */
+}
+
+.explore-grid #globe-explore-container {
+  margin: 0;
+  justify-self: center;
+  align-self: center;
+  width: 100%;
+  max-width: 800px; /* keep globe at intended size */
+}
+
+.explore-side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.explore-grid #country-stats {
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .explore-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .explore-grid #globe-explore-container {
+    margin: 0 auto;
+    max-width: 620px;
+  }
+}
+
+#legend-explore {
+  position: static;
+  transform: none;
+  left: auto;
+  bottom: auto;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  background: rgba(7, 11, 22, 0.9);
+  border-radius: 10px;
+  padding: 8px 10px;
+  border: 1px solid #29344c;
+  backdrop-filter: blur(4px);
+}
+
+#legend-explore .legend-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #a4abc7;
+  margin-bottom: 6px;
+}
+
+#legend-explore .legend-bar {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background-image: linear-gradient(to right, #171c2b, #433c8f, #2569b3, #25a17c, #b8e986);
+  margin-bottom: 4px;
+}
+
+#legend-explore .legend-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: #c4cadf;
 }
 
 /* Legend reused for explore view */
